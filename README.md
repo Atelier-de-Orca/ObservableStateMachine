@@ -1,8 +1,9 @@
 # RxStateMachine
-> object based state machine with UniRx
+> model based state machine with UniRx
 
 ## Feature
-1. Object based (use string key not enum)
+1. state is model (so, use string key not enum)
+1. based on monobehavior object (for easy setup and debug)
 
 ## Todo
 
