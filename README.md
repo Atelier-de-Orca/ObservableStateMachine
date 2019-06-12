@@ -1,11 +1,13 @@
-# RxStateMachine
-> model based state machine with UniRx
+# ObservableStateMachine
+> Model based Observable State Machine with UniRx
 
 ## Feature
-1. state is model (so, use string key not enum)
+1. state is model (not logic or behaviour)
 1. based on monobehavior object (for easy setup and debug)
 
 ## Todo
+- [ ] Add node editor (for easy editing)
+- [ ] Add state model serializer
 
 
 ## License
