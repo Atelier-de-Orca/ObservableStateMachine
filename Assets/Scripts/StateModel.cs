@@ -1,12 +1,13 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 [Serializable]
-public class StringRxStatePair {
+public class StringStateModelPair {
     public string key;
-    public RxState value;
+    public StateModel value;
 }
 
 [Serializable]
@@ -15,7 +16,7 @@ public class StateTransitionTrigger {
     public string value;
 }
 
-public class RxState : MonoBehaviour {
+public class StateModel : MonoBehaviour {
 
     public List<StateTransitionTrigger> transitionTable;
 
