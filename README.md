@@ -1,16 +1,21 @@
-![title](/README_RESOURCE/ObservableStateMachineLogo.png){: width="100%"}
+![title](/README_RESOURCE/ObservableStateMachineLogo.png)
 # ObservableStateMachine
+![Stargazers](https://img.shields.io/badge/unity-2019.1.0f2-lightgrey.svg)
+[![Stargazers](https://img.shields.io/github/license/Atelier-de-Orca/ObservableStateMachine.svg)](/LICENSE)
 > Model based Observable State Machine with UniRx
-## Feature
-1. state is model (not logic or behaviour)
-1. based on monobehavior object (for easy setup and debug)
-
-## Todo
+  
+## 📖 Introduction
+### 🔨 Feature
+> 1. state is model (not logic or behaviour)
+> 1. based on monobehavior object (for easy setup and debug)
+## 👨‍💻 Dependency
+## 📑 Example
+## 📝 Todo
 - [ ] Add node editor (for easy editing)
 - [ ] Add state model serializer
+- [ ] Update demo & example(rpg monster setting)
 
-
-## License
+## ©️ License
 
 <img align="right" src="http://opensource.org/trademarks/opensource/OSI-Approved-License-100x137.png">
 
