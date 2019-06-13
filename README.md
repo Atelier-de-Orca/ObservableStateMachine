@@ -5,18 +5,23 @@
 > Model based Observable State Machine with UniRx
   
 ## 📖 Introduction
-### 🔨 Feature
-> 1. state is model (not logic or behaviour)
-> 1. based on monobehavior object (for easy setup and debug)
+- It is useful if you have presets of state that an object can have.  
+- `Presenter`'s behaviour is written as one, and transition(between pre-defined status models) is notified to the stream to help `Presenter`'s behaviour.  
+- `pre-defined state model` can contain data to show on `View` or variables for `Presenter's action` (even simple actions such as Skill)
+  
 ## 👨‍💻 Dependency
+### neuecc/UniRx
+- [:octocat: Github](https://github.com/neuecc/UniRx)
+- [🛍️ AssetStore](https://assetstore.unity.com/packages/tools/integration/unirx-reactive-extensions-for-unity-17276)
+  
 ## 📑 Example
+  
 ## 📝 Todo
 - [ ] Add node editor (for easy editing)
 - [ ] Add state model serializer
 - [ ] Update demo & example(rpg monster setting)
-
+  
 ## ©️ License
-
 <img align="right" src="http://opensource.org/trademarks/opensource/OSI-Approved-License-100x137.png">
 
 The class is licensed under the [MIT License](http://opensource.org/licenses/MIT):
