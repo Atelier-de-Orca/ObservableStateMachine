@@ -1,6 +1,6 @@
+![title](/README_RESOURCE/ObservableStateMachineLogo.png){: width="100%"}
 # ObservableStateMachine
 > Model based Observable State Machine with UniRx
-
 ## Feature
 1. state is model (not logic or behaviour)
 1. based on monobehavior object (for easy setup and debug)
