@@ -34,121 +34,72 @@ namespace OSM {
         public OSM_Graph graph;
         
         public OSM_Editor editor;
-        public ActionManager actions;
-        public ActionTriggerSystem triggers;
         public OSM_EditorState state;
-        // private SaveManager _saveManager;
-
+        
         public enum Mode { Edit, View };
         private Mode _mode = Mode.Edit;
 
-        void OnEnable()
-        {
+        void OnEnable() {
+
             GUIScaleUtility.CheckInit();
 
-            actions = new ActionManager(this);
             editor = new OSM_Editor(this);
-            triggers = new ActionTriggerSystem(actions);
             state = new OSM_EditorState();
 
-            // _saveManager = new SaveManager(this);
-
             editor.graph = graph;
-
-            // Make sure that changes from the undo system are immediately
-            // updated in the window. If not, the undo changes will be
-            // visually delayed.
-            actions.OnUndo += Repaint;
-            actions.OnRedo += Repaint;
-
-            // Always start in edit mode.
-            // The only way it can be in view mode is if the window is 
-            // already opened and the user selects a some graph.
             _mode = Mode.Edit;
 
             editor.HomeView();
         }
 
-        void OnDisable()
-        {
-            //_saveManager.Cleanup();
-        }
+        void OnDisable() { }
 
-        void OnDestroy()
-        {
-            cleanup();
-        }
+        void OnDestroy() { }
 
-        void OnGUI()
-        {
-            // Asset removed.
-            // if (!graph && !_saveManager.IsInNographState()) {
-            //     _saveManager.InitState();
-            // }
+        void OnGUI() {
 
             editor.Draw();
             drawToolbar();
-
-            // This must go after draw calls or there can be 
-            // GUI layout errors.
-            triggers.Update();
         }
 
-        public void SetGraph(OSM_Graph g, Mode mode = Mode.Edit)
-        {
+        public void SetGraph(OSM_Graph g, Mode mode = Mode.Edit) {
             graph = g;
             editor.graph = g;
-
-            // Reset Undo and Redo buffers.
-            actions.Reset();
 
             _mode = mode;
         }
 
-        private void cleanup()
-        {
-            if (actions != null) {
-                actions.OnUndo -= Repaint;
-                actions.OnRedo -= Repaint;
-            }
-
-            actions.Reset();
-            // _saveManager.Cleanup();
-        }
-
-        private void drawToolbar()
-        {
+        private void drawToolbar() {
             EditorGUILayout.BeginHorizontal("Toolbar");
 
             if (DropdownButton("File", kToolbarButtonWidth)) {
-                createFileMenu();
+                CreateFileMenu();
             }
 
             if (DropdownButton("Edit", kToolbarButtonWidth)) {
-                createEditMenu();
+                CreateEditMenu();
             }
 
             if (DropdownButton("View", kToolbarButtonWidth)) {
-                createViewMenu();
+                CreateViewMenu();
             }
 
             if (DropdownButton("Settings", kToolbarButtonWidth + 10f)) {
-                createSettingsMenu();
+                CreateSettingsMenu();
             }
 
             if (DropdownButton("Tools", kToolbarButtonWidth)) {
-                createToolsMenu();
+                CreateToolsMenu();
             }
 
-            // Make the toolbar extend all throughout the window extension.
             GUILayout.FlexibleSpace();
-            drawGraphName();
+            DrawGraphName();
             
             EditorGUILayout.EndHorizontal();
         }
 
-        private void drawGraphName()
-        {
+        private void DrawGraphName() {
+
             string graphName = "None";
             if (graph != null) {
                 graphName = graph.GetName();
@@ -157,32 +108,20 @@ namespace OSM {
             GUILayout.Label(graphName);
         }
 
-        private void createFileMenu()
-        {
+        private void CreateFileMenu() {
+            
             var menu = new GenericMenu();
-
-            // menu.AddItem(new GUIContent("Create New"), false, _saveManager.RequestNew);
-            // menu.AddItem(new GUIContent("Load"), false, _saveManager.RequestLoad);
-
-            // menu.AddSeparator("");
-            // menu.AddItem(new GUIContent("Save"), false, _saveManager.RequestSave);
-            // menu.AddItem(new GUIContent("Save As"), false, _saveManager.RequestSaveAs);
-
             menu.DropDown(new Rect(5f, kToolbarHeight, 0f, 0f));
         }
 
-        private void createEditMenu()
-        {
+        private void CreateEditMenu() {
+
             var menu = new GenericMenu();
-
-            menu.AddItem(new GUIContent("Undo"), false, actions.UndoAction);
-            menu.AddItem(new GUIContent("Redo"), false, actions.RedoAction);
-
             menu.DropDown(new Rect(55f, kToolbarHeight, 0f, 0f));
         }
 
-        private void createViewMenu()
-        {
+        private void CreateViewMenu() {
+
             var menu = new GenericMenu();
 
             menu.AddItem(new GUIContent("Home"), false, editor.HomeView);
@@ -192,8 +131,7 @@ namespace OSM {
             menu.DropDown(new Rect(105f, kToolbarHeight, 0f, 0f));
         }
 
-        private void createSettingsMenu()
-        {
+        private void CreateSettingsMenu() {
             var menu = new GenericMenu();
 
             menu.AddItem(new GUIContent("Show Guide"), editor.bDrawGuide, editor.ToggleDrawGuide);
@@ -201,63 +139,20 @@ namespace OSM {
             menu.DropDown(new Rect(155f, kToolbarHeight, 0f, 0f));
         }
 
-        private void createToolsMenu()
-        {
-            var menu = new GenericMenu();
+        private void CreateToolsMenu() {
 
-            menu.AddItem(new GUIContent("Add Test Nodes"), false, addTestNodes);
-            menu.AddItem(new GUIContent("Clear Nodes"), false, clearNodes);
+            var menu = new GenericMenu();
 
             menu.DropDown(new Rect(215f, kToolbarHeight, 0f, 0f));
         }
 
-        public bool DropdownButton(string name, float width)
-        {
+        public bool DropdownButton(string name, float width) {
             return GUILayout.Button(name, EditorStyles.toolbarDropDown, GUILayout.Width(width));
         }
 
-        private void addTestNodes()
-        {
-            if (graph != null) {
-
-                for (int x = 0; x < 10; x++) {
-                    for (int y = 0; y < 10; y++) {
-
-                        // var node = SaveManager.CreateNode<BasicNode>(graph);
-
-                        float xpos = x * OSM_Node.kDefaultSize.x * 1.5f;
-                        float ypos = y * OSM_Node.kDefaultSize.y * 1.5f;
-                        // node.bodyRect.position = new Vector2(xpos, ypos);
-                    }
-                }
-            }
-        }
-
-        private void clearNodes()
-        {
-            if (graph != null) {
-
-                graph.Clear();
-                actions.Reset();
-            }
-        }
-
-        /// <summary>
-        /// The size of the window.
-        /// </summary>
-        public Rect Size
-        {
-            get { return new Rect(Vector2.zero, position.size); }
-        }
-
-        /// <summary>
-        /// The rect used to filter input.
-        /// This is so the toolbar is not ignored by editor inputs.
-        /// </summary>
-        public Rect InputRect
-        {
-            get
-            {
+        public Rect Size { get { return new Rect(Vector2.zero, position.size); } }
+        public Rect InputRect {
+            get {
                 var rect = Size;
 
                 rect.y += kToolbarHeight;
@@ -267,20 +162,11 @@ namespace OSM {
             }
         }
 
-        public Mode GetMode()
-        {
-            return _mode;
-        }
+        public Mode GetMode() { return _mode; }
 
-        /// <summary>
-        /// Opens up the node editor window from asset selection.
-        /// </summary>
-        /// <param name="instanceID"></param>
-        /// <param name="line"></param>
-        /// <returns></returns>
+
         [OnOpenAsset(1)]
-        private static bool OpenGraphAsset(int instanceID, int line)
-        {
+        private static bool OpenGraphAsset(int instanceID, int line) {
             var graphSelected = EditorUtility.InstanceIDToObject(instanceID) as OSM_Graph;
 
             if (graphSelected != null) {

@@ -58,32 +58,32 @@ namespace OSM {
         public void Draw()
         {
             if (Event.current.type == EventType.Repaint) {
-                drawGrid();
+                DrawGrid();
                 updateTextures();
             }
 
             if (graph != null)
-                drawGraphContents();
+                DrawGraphContents();
 
-            drawMode();
+            DrawMode();
         }
 
-        private void drawGraphContents()
+        private void DrawGraphContents()
         {
             Rect graphRect = _window.Size;
             var center = graphRect.size / 2f;
 
             _zoomAdjustment = GUIScaleUtility.BeginScale(ref graphRect, center, ZoomScale, false);
 
-            drawGridOverlay();
-            drawConnectionPreview();
-            drawConnections();
-            drawNodes();
+            DrawGridOverlay();
+            DrawConnectionPreview();
+            DrawConnections();
+            DrawNodes();
 
             GUIScaleUtility.EndScale();
         }
 
-        private void drawGrid()
+        private void DrawGrid()
         {
             var size = _window.Size.size;
             var center = size / 2f;
@@ -106,19 +106,19 @@ namespace OSM {
             GUI.DrawTextureWithTexCoords(_window.Size, _gridTex, new Rect(tileOffset, tileAmount));
         }
 
-        // Handles drawing things over the grid such as axes.
-        private void drawGridOverlay()
+        // Handles Drawing things over the grid such as axes.
+        private void DrawGridOverlay()
         {
-            drawAxes();
-            drawGridCenter();
+            DrawAxes();
+            DrawGridCenter();
 
             if (bDrawGuide) {
-                drawGuide();
+                DrawGuide();
                 _window.Repaint();
             }
         }
 
-        private void drawGridCenter()
+        private void DrawGridCenter()
         {
             var rect = kReticleRect;
 
@@ -129,7 +129,7 @@ namespace OSM {
             DrawTintTexture(rect, _circleTex, Color.gray);
         }
 
-        private void drawAxes()
+        private void DrawAxes()
         {
             // Draw axes. Make sure to scale based on zoom.
             Vector2 up = Vector2.up * _window.Size.height * ZoomScale;
@@ -152,45 +152,25 @@ namespace OSM {
             DrawLine(up, down, Color.gray);
         }
 
-        /// <summary>
-        /// Shows where the center of the grid is.
-        /// </summary>
-        private void drawGuide()
-        {
+        private void DrawGuide() {
             Vector2 gridCenter = GraphToScreenSpace(Vector2.zero);
             DrawLine(gridCenter, Event.current.mousePosition, guideColor);
         }
 
-        private void drawNodes()
-        {
-            // Calculate the viewing rect in graph space.
-            var view = _window.Size;
-            view.size *= ZoomScale;
-            view.center = -panOffset;
+        private void DrawNodes() { }
 
-            // Render nodes within the view space for performance.
-            foreach (OSM_Node node in graph.nodes) {
-
-                if (view.Overlaps(node.bodyRect)) {
-                    drawNode(node);
-                    drawKnobs(node);
-                }
-            }
-        }
-
-        private void drawKnobs(OSM_Node node)
+        private void DrawKnobs(OSM_Node node)
         {
             foreach (var input in node.Inputs) {
-                drawKnob(input);
+                DrawKnob(input);
             }
 
             foreach (var output in node.Outputs) {
-                drawKnob(output);
+                DrawKnob(output);
             }
         }
 
-        private void drawKnob(NodeConnection knob)
-        {
+        private void DrawKnob(NodeConnection knob) {
             // Convert the body rect from graph to screen space.
             var screenRect = knob.bodyRect;
             screenRect.position = GraphToScreenSpace(screenRect.position);
@@ -198,23 +178,9 @@ namespace OSM {
             GUI.DrawTexture(screenRect, _knobTex);
         }
 
-        private void drawConnections()
-        {
-            foreach (var node in graph.nodes) {
-                foreach (var output in node.Outputs) {
-                    foreach (var input in output.Inputs) {
+        private void DrawConnections() { }
 
-                        Vector2 start = GraphToScreenSpace(output.bodyRect.center);
-                        Vector2 end = GraphToScreenSpace(input.bodyRect.center);
-
-                        DrawBezier(start, end, knobColor);
-                    }
-                }
-            }
-        }
-
-        private void drawConnectionPreview()
-        {
+        private void DrawConnectionPreview() {
             var output = _window.state.selectedOutput;
 
             if (output != null) {
@@ -223,8 +189,7 @@ namespace OSM {
             }
         }
 
-        private void drawNode(OSM_Node node)
-        {
+        private void DrawNode(OSM_Node node) {
             // Convert the node rect from graph to screen space.
             Rect screenRect = node.bodyRect;
             screenRect.position = GraphToScreenSpace(screenRect.position);
@@ -239,21 +204,21 @@ namespace OSM {
             // Draw the contents inside the node body, automatically laidout.
             GUILayout.BeginArea(localRect, GUIStyle.none);
 
-            node.HeaderStyle.normal.background = _headerTex;
+            // node.HeaderStyle.normal.background = _headerTex;
 
-            EditorGUI.BeginChangeCheck();
-            node.OnNodeGUI();
-            if (EditorGUI.EndChangeCheck()) 
-                if (onNodeGuiChange != null) onNodeGuiChange(graph, node);
+            // EditorGUI.BeginChangeCheck();
+            // node.OnNodeGUI();
+            // if (EditorGUI.EndChangeCheck()) 
+            //     if (onNodeGuiChange != null) onNodeGuiChange(graph, node);
 
-            GUILayout.EndArea();
-            GUI.EndGroup();
+            // GUILayout.EndArea();
+            // GUI.EndGroup();
         }
 
         /// <summary>
         /// Draw the window mode in the background.
         /// </summary>
-        public void drawMode()
+        public void DrawMode()
         {
             if (!graph) {
                 GUI.Label(_modeStatusRect, new GUIContent("No Graph Set"), ModeStatusStyle);
@@ -340,76 +305,75 @@ namespace OSM {
             bDrawGuide = !bDrawGuide;
         }
 
-        public void HomeView()
-        {
-            if (!graph || graph.nodes.Count == 0) {
-                panOffset = Vector2.zero;
-                return;
-            }
+        public void HomeView() {
+            // if (!graph || graph.nodes.Count == 0) {
+            //     panOffset = Vector2.zero;
+            //     return;
+            // }
 
-            float xMin = float.MaxValue;
-            float xMax = float.MinValue;
-            float yMin = float.MaxValue;
-            float yMax = float.MinValue;
+            // float xMin = float.MaxValue;
+            // float xMax = float.MinValue;
+            // float yMin = float.MaxValue;
+            // float yMax = float.MinValue;
 
-            foreach (var node in graph.nodes) {
+            // foreach (var node in graph.nodes) {
 
-                Rect r = node.bodyRect;
+            //     Rect r = node.bodyRect;
 
-                if (r.xMin < xMin) {
-                    xMin = r.xMin;
-                }
+            //     if (r.xMin < xMin) {
+            //         xMin = r.xMin;
+            //     }
 
-                if (r.xMax > xMax) {
-                    xMax = r.xMax;
-                }
+            //     if (r.xMax > xMax) {
+            //         xMax = r.xMax;
+            //     }
 
-                if (r.yMin < yMin) {
-                    yMin = r.yMin;
-                }
+            //     if (r.yMin < yMin) {
+            //         yMin = r.yMin;
+            //     }
 
-                if (r.yMax > yMax) {
-                    yMax = r.yMax;
-                }
-            }
+            //     if (r.yMax > yMax) {
+            //         yMax = r.yMax;
+            //     }
+            // }
 
-            // Add some padding so nodes do not appear on the edge of the view.
-            xMin -= Node.kDefaultSize.x;
-            xMax += Node.kDefaultSize.x;
-            yMin -= Node.kDefaultSize.y;
-            yMax += Node.kDefaultSize.y;
-            var nodesArea = Rect.MinMaxRect(xMin, yMin, xMax, yMax);
+            // // Add some padding so nodes do not appear on the edge of the view.
+            // xMin -= Node.kDefaultSize.x;
+            // xMax += Node.kDefaultSize.x;
+            // yMin -= Node.kDefaultSize.y;
+            // yMax += Node.kDefaultSize.y;
+            // var nodesArea = Rect.MinMaxRect(xMin, yMin, xMax, yMax);
 
-            // Center the pan in the bounding view.
-            panOffset = -nodesArea.center;
+            // // Center the pan in the bounding view.
+            // panOffset = -nodesArea.center;
 
-            // Calculate the required zoom based on the ratio between the window view and node area rect.
-            var winSize = _window.Size;
-            float zoom = 1f;
+            // // Calculate the required zoom based on the ratio between the window view and node area rect.
+            // var winSize = _window.Size;
+            // float zoom = 1f;
 
-            // Use the view width to determine zoom to fit the entire node area width.
-            if (nodesArea.width > nodesArea.height) {
+            // // Use the view width to determine zoom to fit the entire node area width.
+            // if (nodesArea.width > nodesArea.height) {
 
-                float widthRatio = nodesArea.width / winSize.width;
-                zoom = widthRatio;
+            //     float widthRatio = nodesArea.width / winSize.width;
+            //     zoom = widthRatio;
 
-                if (widthRatio < 1f) {
-                    zoom = 1 / widthRatio;
-                }
-            }
+            //     if (widthRatio < 1f) {
+            //         zoom = 1 / widthRatio;
+            //     }
+            // }
 
-            // Use the height to determine zoom.
-            else {
+            // // Use the height to determine zoom.
+            // else {
 
-                float heightRatio = nodesArea.height / winSize.height;
-                zoom = heightRatio;
+            //     float heightRatio = nodesArea.height / winSize.height;
+            //     zoom = heightRatio;
 
-                if (heightRatio < 1f) {
-                    zoom = 1 / heightRatio;
-                }
-            }
+            //     if (heightRatio < 1f) {
+            //         zoom = 1 / heightRatio;
+            //     }
+            // }
 
-            ZoomScale = zoom;
+            // ZoomScale = zoom;
         }
 
         #endregion
@@ -441,122 +405,73 @@ namespace OSM {
             }
         }
 
-        /// <summary>
-        /// Convertes the screen position to graph space.
-        /// </summary>
-        public Vector2 ScreenToGraphSpace(Vector2 screenPos)
-        {
+        public Vector2 ScreenToGraphSpace(Vector2 screenPos) {
+
             var graphRect = _window.Size;
             var center = graphRect.size / 2f;
             return (screenPos - center) * ZoomScale - panOffset;
         }
 
-        /// <summary>
-        /// Returns the mouse position in graph space.
-        /// </summary>
-        /// <returns></returns>
         public Vector2 MousePosition()
         {
             return ScreenToGraphSpace(Event.current.mousePosition);
         }
 
-        /// <summary>
-        /// Tests if the rect is under the mouse.
-        /// </summary>
-        /// <param name="r"></param>
-        /// <returns></returns>
-        public bool IsUnderMouse(Rect r)
-        {
+        public bool IsUnderMouse(Rect r) {
             return r.Contains(MousePosition());
         }
 
-        /// <summary>
-        /// Converts the graph position to screen space.
-        /// This only works for geometry inside the GUIScaleUtility.BeginScale()
-        /// </summary>
-        /// <param name="graphPos"></param>
-        /// <returns></returns>
-        public Vector2 GraphToScreenSpace(Vector2 graphPos)
-        {
+        public Vector2 GraphToScreenSpace(Vector2 graphPos) {
             return graphPos + _zoomAdjustment + panOffset;
         }
 
-        /// <summary>
-        /// Converts the graph position to screen space.
-        /// This only works for geometry inside the GUIScaleUtility.BeginScale().
-        /// </summary>
-        /// <param name="graphPos"></param>
-        public void graphToScreenSpace(ref Vector2 graphPos)
-        {
+        public void graphToScreenSpace(ref Vector2 graphPos) {
             graphPos += _zoomAdjustment + panOffset;
         }
 
-        /// <summary>
-        /// Converts the graph position to screen space.
-        /// This works for geometry NOT inside the GUIScaleUtility.BeginScale().
-        /// </summary>
-        /// <param name="graphPos"></param>
-        public void graphToScreenSpaceZoomAdj(ref Vector2 graphPos)
-        {
+        public void graphToScreenSpaceZoomAdj(ref Vector2 graphPos) {
             graphPos = GraphToScreenSpace(graphPos) / ZoomScale;
         }
 
-        /// <summary>
-        /// Executes the callback on the first node that is detected under the mouse.
-        /// </summary>
-        /// <param name="callback"></param>
-        public bool OnMouseOverNode(Action<OSM_Node> callback)
-        {
-            if (!graph) {
-                return false;
-            }
+        public bool OnMouseOverNode(Action<OSM_Node> callback) {
+            // if (!graph) {
+            //     return false;
+            // }
 
-            for (int i = graph.nodes.Count - 1; i >= 0; --i) {
+            // for (int i = graph.nodes.Count - 1; i >= 0; --i) {
 
-                Node node = graph.nodes[i];
+            //     Node node = graph.nodes[i];
 
-                if (IsUnderMouse(node.bodyRect)) {
-                    callback(node);
-                    return true;
-                }
-            }
+            //     if (IsUnderMouse(node.bodyRect)) {
+            //         callback(node);
+            //         return true;
+            //     }
+            // }
 
-            // No node under mouse.
+            // // No node under mouse.
             return false;
         }
 
-        /// <summary>
-        /// Tests if the mouse is over an output.
-        /// </summary>
-        /// <param name="callback"></param>
-        /// <returns></returns>
-        public bool OnMouseOverOutput(Action<NodeOutput> callback)
-        {
-            if (!graph) {
-                return false;
-            }
+        public bool OnMouseOverOutput(Action<NodeOutput> callback) {
+            // if (!graph) {
+            //     return false;
+            // }
 
-            foreach (var node in graph.nodes) {
+            // foreach (var node in graph.nodes) {
 
-                foreach (var output in node.Outputs) {
+            //     foreach (var output in node.Outputs) {
 
-                    if (IsUnderMouse(output.bodyRect)) {
-                        callback(output);
-                        return true;
-                    }
-                }
-            }
+            //         if (IsUnderMouse(output.bodyRect)) {
+            //             callback(output);
+            //             return true;
+            //         }
+            //     }
+            // }
 
             return false;
         }
 
-        /// <summary>
-        /// Tests if the mouse is over an input.
-        /// </summary>
-        /// <param name="callback"></param>
-        /// <returns></returns>
-        public bool OnMouseOverInput(Action<NodeInput> callback)
-        {
+        public bool OnMouseOverInput(Action<NodeInput> callback) {
             if (!graph) {
                 return false;
             }
@@ -575,35 +490,29 @@ namespace OSM {
             return false;
         }
 
-        /// <summary>
-        /// Tests if the mouse is over the node or the input.
-        /// </summary>
-        /// <param name="callback"></param>
-        /// <returns></returns>
-        public bool OnMouseOverNode_OrInput(Action<OSM_Node> callback)
-        {
+        public bool OnMouseOverNode_OrInput(Action<OSM_Node> callback) {
             if (!graph) {
                 return false;
             }
 
-            foreach (var node in graph.nodes) {
+            // foreach (var node in graph.nodes) {
 
-                if (IsUnderMouse(node.bodyRect)) {
-                    callback(node);
-                    return true;
-                }
+            //     if (IsUnderMouse(node.bodyRect)) {
+            //         callback(node);
+            //         return true;
+            //     }
 
-                // Check inputs
-                else {
+            //     // Check inputs
+            //     else {
 
-                    foreach (var input in node.Inputs) {
-                        if (IsUnderMouse(input.bodyRect)) {
-                            callback(node);
-                            return true;
-                        }
-                    }
-                }
-            }
+            //         foreach (var input in node.Inputs) {
+            //             if (IsUnderMouse(input.bodyRect)) {
+            //                 callback(node);
+            //                 return true;
+            //             }
+            //         }
+            //     }
+            // }
 
             // No node under mouse.
             return false;
@@ -614,10 +523,8 @@ namespace OSM {
         #region Styles
 
         private GUIStyle _backgroundStyle;
-        private GUIStyle backgroundStyle
-        {
-            get
-            {
+        private GUIStyle backgroundStyle {
+            get {
                 if (_backgroundStyle == null) {
                     _backgroundStyle = new GUIStyle(GUI.skin.box);
                     _backgroundStyle.normal.background = _backTex;
@@ -630,10 +537,8 @@ namespace OSM {
 
         private static Rect _modeStatusRect = new Rect(20f, 20f, 250f, 150f);
         private static GUIStyle _modeStatusStyle;
-        private static GUIStyle ModeStatusStyle
-        {
-            get
-            {
+        private static GUIStyle ModeStatusStyle {
+            get {
                 if (_modeStatusStyle == null) {
                     _modeStatusStyle = new GUIStyle();
                     _modeStatusStyle.fontSize = 36;
