@@ -27,8 +27,8 @@ namespace OSM {
             w.Show();
         }
 
-        public const float kToolbarHeight = 20f;
-        public const float kToolbarButtonWidth = 50f;
+        public float ToolbarHeight => 20f;
+        public float ToolbarButtonWidth => 50f;
 
         [SerializeField]
         public OSM_Graph graph;
@@ -59,7 +59,27 @@ namespace OSM {
         void OnGUI() {
 
             editor.Draw();
-            drawToolbar();
+
+            OnEventProcess(Event.current);
+        }
+
+        private void OnEventProcess(Event e) {
+            if (e.isMouse && e.button == 0) {
+                if (e.type == EventType.MouseDown) {
+                    Debug.Log("Left Mouse Down");
+                }
+                else if (e.type == EventType.MouseUp) {
+                    Debug.Log("Left Mouse Up");
+                }
+            }
+            else if (e.isMouse && e.button == 1) {
+                if (e.type == EventType.MouseDown) {
+                    Debug.Log("Right Mouse Down");
+                }
+                else if (e.type == EventType.MouseUp) {
+                    Debug.Log("Right Mouse Up");
+                }
+            }
         }
 
         public void SetGraph(OSM_Graph g, Mode mode = Mode.Edit) {
@@ -69,94 +89,13 @@ namespace OSM {
             _mode = mode;
         }
 
-        private void drawToolbar() {
-            EditorGUILayout.BeginHorizontal("Toolbar");
-
-            if (DropdownButton("File", kToolbarButtonWidth)) {
-                CreateFileMenu();
-            }
-
-            if (DropdownButton("Edit", kToolbarButtonWidth)) {
-                CreateEditMenu();
-            }
-
-            if (DropdownButton("View", kToolbarButtonWidth)) {
-                CreateViewMenu();
-            }
-
-            if (DropdownButton("Settings", kToolbarButtonWidth + 10f)) {
-                CreateSettingsMenu();
-            }
-
-            if (DropdownButton("Tools", kToolbarButtonWidth)) {
-                CreateToolsMenu();
-            }
-
-            GUILayout.FlexibleSpace();
-            DrawGraphName();
-            
-            EditorGUILayout.EndHorizontal();
-        }
-
-        private void DrawGraphName() {
-
-            string graphName = "None";
-            if (graph != null) {
-                graphName = graph.GetName();
-            }
-
-            GUILayout.Label(graphName);
-        }
-
-        private void CreateFileMenu() {
-            
-            var menu = new GenericMenu();
-            menu.DropDown(new Rect(5f, kToolbarHeight, 0f, 0f));
-        }
-
-        private void CreateEditMenu() {
-
-            var menu = new GenericMenu();
-            menu.DropDown(new Rect(55f, kToolbarHeight, 0f, 0f));
-        }
-
-        private void CreateViewMenu() {
-
-            var menu = new GenericMenu();
-
-            menu.AddItem(new GUIContent("Home"), false, editor.HomeView);
-            menu.AddItem(new GUIContent("Zoom In"), false, () => { editor.Zoom(-1); });
-            menu.AddItem(new GUIContent("Zoom Out"), false, () => { editor.Zoom(1); });
-
-            menu.DropDown(new Rect(105f, kToolbarHeight, 0f, 0f));
-        }
-
-        private void CreateSettingsMenu() {
-            var menu = new GenericMenu();
-
-            menu.AddItem(new GUIContent("Show Guide"), editor.bDrawGuide, editor.ToggleDrawGuide);
-            
-            menu.DropDown(new Rect(155f, kToolbarHeight, 0f, 0f));
-        }
-
-        private void CreateToolsMenu() {
-
-            var menu = new GenericMenu();
-
-            menu.DropDown(new Rect(215f, kToolbarHeight, 0f, 0f));
-        }
-
-        public bool DropdownButton(string name, float width) {
-            return GUILayout.Button(name, EditorStyles.toolbarDropDown, GUILayout.Width(width));
-        }
-
         public Rect Size { get { return new Rect(Vector2.zero, position.size); } }
         public Rect InputRect {
             get {
                 var rect = Size;
 
-                rect.y += kToolbarHeight;
-                rect.height -= kToolbarHeight;
+                rect.y += ToolbarHeight;
+                rect.height -= ToolbarHeight;
 
                 return rect;
             }

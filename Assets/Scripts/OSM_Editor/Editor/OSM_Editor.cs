@@ -55,8 +55,8 @@ namespace OSM {
 
         #region Drawing
 
-        public void Draw()
-        {
+        public void Draw() {
+
             if (Event.current.type == EventType.Repaint) {
                 DrawGrid();
                 updateTextures();
@@ -66,6 +66,74 @@ namespace OSM {
                 DrawGraphContents();
 
             DrawMode();
+            DrawToolbar();
+        }
+
+        private void DrawToolbar() {
+            EditorGUILayout.BeginHorizontal("Toolbar");
+
+            if (DropdownButton("File")) { CreateFileMenu(); }
+            if (DropdownButton("Edit")) { CreateEditMenu(); }
+            if (DropdownButton("View")) { CreateViewMenu(); }
+            if (DropdownButton("Settings")) { CreateSettingsMenu(); }
+            if (DropdownButton("Tools")) { CreateToolsMenu(); }
+
+            GUILayout.FlexibleSpace();
+            DrawGraphName();
+            
+            EditorGUILayout.EndHorizontal();
+        }
+
+        private void DrawGraphName() {
+
+            string graphName = "None";
+            if (graph != null) {
+                graphName = graph.GetName();
+            }
+
+            GUILayout.Label(graphName);
+        }
+
+        private void CreateFileMenu() {
+            
+            var menu = new GenericMenu();
+            menu.DropDown(new Rect(5f, _window.ToolbarHeight, 0f, 0f));
+        }
+
+        private void CreateEditMenu() {
+
+            var menu = new GenericMenu();
+            menu.DropDown(new Rect(55f, _window.ToolbarHeight, 0f, 0f));
+        }
+
+        private void CreateViewMenu() {
+
+            var menu = new GenericMenu();
+
+            menu.AddItem(new GUIContent("Home"), false, HomeView);
+            menu.AddItem(new GUIContent("Zoom In"), false, () => { Zoom(-1); });
+            menu.AddItem(new GUIContent("Zoom Out"), false, () => { Zoom(1); });
+
+            menu.DropDown(new Rect(105f, _window.ToolbarHeight, 0f, 0f));
+        }
+
+        private void CreateSettingsMenu() {
+            var menu = new GenericMenu();
+
+            menu.AddItem(new GUIContent("Show Guide"), bDrawGuide, ToggleDrawGuide);
+            
+            menu.DropDown(new Rect(155f, _window.ToolbarHeight, 0f, 0f));
+        }
+
+        private void CreateToolsMenu() {
+
+            var menu = new GenericMenu();
+
+            menu.DropDown(new Rect(215f, _window.ToolbarHeight, 0f, 0f));
+        }
+
+        public bool DropdownButton(string name) {
+            return GUILayout.Button(name, EditorStyles.toolbarDropDown, GUILayout.Width(_window.ToolbarButtonWidth));
         }
 
         private void DrawGraphContents()
@@ -107,8 +175,7 @@ namespace OSM {
         }
 
         // Handles Drawing things over the grid such as axes.
-        private void DrawGridOverlay()
-        {
+        private void DrawGridOverlay() {
             DrawAxes();
             DrawGridCenter();
 
@@ -118,8 +185,7 @@ namespace OSM {
             }
         }
 
-        private void DrawGridCenter()
-        {
+        private void DrawGridCenter() {
             var rect = kReticleRect;
 
             rect.size *= ZoomScale;
@@ -129,8 +195,7 @@ namespace OSM {
             DrawTintTexture(rect, _circleTex, Color.gray);
         }
 
-        private void DrawAxes()
-        {
+        private void DrawAxes() {
             // Draw axes. Make sure to scale based on zoom.
             Vector2 up = Vector2.up * _window.Size.height * ZoomScale;
             Vector2 right = Vector2.right * _window.Size.width * ZoomScale;
@@ -158,25 +223,6 @@ namespace OSM {
         }
 
         private void DrawNodes() { }
-
-        private void DrawKnobs(OSM_Node node)
-        {
-            foreach (var input in node.Inputs) {
-                DrawKnob(input);
-            }
-
-            foreach (var output in node.Outputs) {
-                DrawKnob(output);
-            }
-        }
-
-        private void DrawKnob(NodeConnection knob) {
-            // Convert the body rect from graph to screen space.
-            var screenRect = knob.bodyRect;
-            screenRect.position = GraphToScreenSpace(screenRect.position);
-
-            GUI.DrawTexture(screenRect, _knobTex);
-        }
 
         private void DrawConnections() { }
 
@@ -215,11 +261,8 @@ namespace OSM {
             // GUI.EndGroup();
         }
 
-        /// <summary>
-        /// Draw the window mode in the background.
-        /// </summary>
-        public void DrawMode()
-        {
+        public void DrawMode() {
+
             if (!graph) {
                 GUI.Label(_modeStatusRect, new GUIContent("No Graph Set"), ModeStatusStyle);
             }
@@ -233,11 +276,7 @@ namespace OSM {
             }
         }
 
-        /// <summary>
-        /// Draws a bezier between the two end points in screen space.
-        /// </summary>
-        public static void DrawBezier(Vector2 start, Vector2 end, Color color)
-        {
+        public static void DrawBezier(Vector2 start, Vector2 end, Color color) {
             Vector2 endToStart = (end - start);
             float dirFactor = Mathf.Clamp(endToStart.magnitude, 20f, 80f);
 
@@ -250,13 +289,7 @@ namespace OSM {
             UnityEditor.Handles.DrawBezier(start, end, startTan, endTan, color, null, 3f);
         }
 
-        /// <summary>
-        /// Draws a line between the two end points.
-        /// </summary>
-        /// <param name="start"></param>
-        /// <param name="end"></param>
-        public static void DrawLine(Vector2 start, Vector2 end, Color color)
-        {
+        public static void DrawLine(Vector2 start, Vector2 end, Color color) {
             var handleColor = Handles.color;
             Handles.color = color;
 
@@ -264,14 +297,7 @@ namespace OSM {
             Handles.color = handleColor;
         }
 
-        /// <summary>
-        /// Draws a GUI texture with a tint.
-        /// </summary>
-        /// <param name="r"></param>
-        /// <param name="t"></param>
-        /// <param name="c"></param>
-        public static void DrawTintTexture(Rect r, Texture t, Color c)
-        {
+        public static void DrawTintTexture(Rect r, Texture t, Color c) {
             var guiColor = GUI.color;
             GUI.color = c;
 
@@ -279,8 +305,7 @@ namespace OSM {
             GUI.color = guiColor;
         }
 
-        public static void BeginGroup(Rect r, GUIStyle style, Color color)
-        {
+        public static void BeginGroup(Rect r, GUIStyle style, Color color) {
             var old = GUI.color;
 
             GUI.color = color;
@@ -290,8 +315,7 @@ namespace OSM {
         }
 
         // TODO: Call after exiting playmode.
-        private void updateTextures()
-        {
+        private void updateTextures() {
             // _knobTex = TextureLib.GetTintTex("Circle", knobColor);
             // _headerTex = TextureLib.GetTintTex("Square", ColorExtensions.From255(79, 82, 94));
         }
@@ -300,8 +324,7 @@ namespace OSM {
 
         #region View Operations
 
-        public void ToggleDrawGuide()
-        {
+        public void ToggleDrawGuide() {
             bDrawGuide = !bDrawGuide;
         }
 
@@ -380,13 +403,11 @@ namespace OSM {
 
         #region Space Transformations and Mouse Utilities
 
-        public void Pan(Vector2 delta)
-        {
+        public void Pan(Vector2 delta) {
             panOffset += delta * ZoomScale * panSpeed;
         }
 
-        public void Zoom(float zoomDirection)
-        {
+        public void Zoom(float zoomDirection) {
             float scale = (zoomDirection < 0f) ? (1f - zoomDelta) : (1f + zoomDelta);
 
             _zoom *= scale;
@@ -395,11 +416,9 @@ namespace OSM {
             _zoom.Set(cap, cap);
         }
 
-        public float ZoomScale
-        {
+        public float ZoomScale {
             get { return _zoom.x; }
-            set
-            {
+            set {
                 float z = Mathf.Clamp(value, minZoom, maxZoom);
                 _zoom.Set(z, z);
             }
@@ -412,8 +431,7 @@ namespace OSM {
             return (screenPos - center) * ZoomScale - panOffset;
         }
 
-        public Vector2 MousePosition()
-        {
+        public Vector2 MousePosition() {
             return ScreenToGraphSpace(Event.current.mousePosition);
         }
 
@@ -433,91 +451,6 @@ namespace OSM {
             graphPos = GraphToScreenSpace(graphPos) / ZoomScale;
         }
 
-        public bool OnMouseOverNode(Action<OSM_Node> callback) {
-            // if (!graph) {
-            //     return false;
-            // }
-
-            // for (int i = graph.nodes.Count - 1; i >= 0; --i) {
-
-            //     Node node = graph.nodes[i];
-
-            //     if (IsUnderMouse(node.bodyRect)) {
-            //         callback(node);
-            //         return true;
-            //     }
-            // }
-
-            // // No node under mouse.
-            return false;
-        }
-
-        public bool OnMouseOverOutput(Action<NodeOutput> callback) {
-            // if (!graph) {
-            //     return false;
-            // }
-
-            // foreach (var node in graph.nodes) {
-
-            //     foreach (var output in node.Outputs) {
-
-            //         if (IsUnderMouse(output.bodyRect)) {
-            //             callback(output);
-            //             return true;
-            //         }
-            //     }
-            // }
-
-            return false;
-        }
-
-        public bool OnMouseOverInput(Action<NodeInput> callback) {
-            if (!graph) {
-                return false;
-            }
-
-            // foreach (var node in graph.GetNodes) {
-
-            //     foreach (var input in node.Inputs) {
-
-            //         if (IsUnderMouse(input.bodyRect)) {
-            //             callback(input);
-            //             return true;
-            //         }
-            //     }
-            // }
-
-            return false;
-        }
-
-        public bool OnMouseOverNode_OrInput(Action<OSM_Node> callback) {
-            if (!graph) {
-                return false;
-            }
-
-            // foreach (var node in graph.nodes) {
-
-            //     if (IsUnderMouse(node.bodyRect)) {
-            //         callback(node);
-            //         return true;
-            //     }
-
-            //     // Check inputs
-            //     else {
-
-            //         foreach (var input in node.Inputs) {
-            //             if (IsUnderMouse(input.bodyRect)) {
-            //                 callback(node);
-            //                 return true;
-            //             }
-            //         }
-            //     }
-            // }
-
-            // No node under mouse.
-            return false;
-        }
-
         #endregion
 
         #region Styles
@@ -533,7 +466,6 @@ namespace OSM {
                 return _backgroundStyle;
             }
         }
-
 
         private static Rect _modeStatusRect = new Rect(20f, 20f, 250f, 150f);
         private static GUIStyle _modeStatusStyle;
