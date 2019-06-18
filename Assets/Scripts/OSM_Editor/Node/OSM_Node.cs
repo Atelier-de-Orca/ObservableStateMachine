@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-namespace OSM
-{
+namespace OSM {
+
     public abstract class OSM_Node : ScriptableObject {
         public static readonly Vector2 kDefaultSize = new Vector2(140f, 110f);
 
@@ -15,7 +15,7 @@ namespace OSM
         public const float kBodyLabelWidth = 100f;
 
         [HideInInspector]
-        public Rect bodyRect;
+        public Rect bodyRect = new Rect();
 
         public const float resizePaddingX = 20f;
 
@@ -34,49 +34,48 @@ namespace OSM
         public NodeInput GetInput(int index) { return _inputs[index]; }
         public NodeOutput GetOutput(int index) { return _outputs[index]; }
 
+        public abstract void Init();
+        public abstract void Init(Vector2 position);
+        public abstract void OnNodeGUI();
         public abstract void OnConnectionsGUI();
         public abstract void OnInputConnectionRemoved(NodeInput removedInput);
         public abstract void OnNewInputConnection(NodeInput addedInput);
     }
     
-    public class OSM_Node<T> : OSM_Node
-    {
-        // Hides the node asset.
-        // Sets up the name via type information.
-        void OnEnable()
-        {
+    public class OSM_Node<T> : OSM_Node {
+
+        void OnEnable() {
             hideFlags = HideFlags.HideInHierarchy;
             name = GetType().Name;
 
 #if UNITY_EDITOR
             name = ObjectNames.NicifyVariableName(name);
 #endif
-
         }
 
-        protected virtual void OnDestroy()
-        {
+        protected virtual void OnDestroy() {
             _inputs.RemoveAll(
-                (input) =>
-                {
+                (input) => {
                     ScriptableObject.DestroyImmediate(input, true);
                     return true;
                 });
 
             _outputs.RemoveAll(
-                (output) =>
-                {
+                (output) => {
                     ScriptableObject.DestroyImmediate(output, true);
                     return true;
                 });
         }
 
-        public virtual void Init() {
+        public override void Init() => Init(Vector2.zero);
+
+        public override void Init(Vector2 position) {
+            bodyRect.position = position;
             bodyRect.size = kDefaultSize;
         }
 
-        public virtual void OnNodeGUI()
-        {
+        public override void OnNodeGUI() {
+            Debug.Log("OnNodeGUI");
             OnNodeHeaderGUI();
             OnConnectionsGUI();
             onBodyGuiInternal();

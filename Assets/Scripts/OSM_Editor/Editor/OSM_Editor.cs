@@ -9,6 +9,10 @@ using NodeEditorFramework.Utilities;
 
 namespace OSM {
 
+    public struct DrawNodeData {
+
+    }
+
     public class OSM_Editor {
         public static Action<OSM_Graph, OSM_Node> onNodeGuiChange;
 
@@ -22,11 +26,11 @@ namespace OSM {
         public OSM_Graph graph;
         private OSM_EditorWindow _window;
 
+        private DrawNodeData nodeWindow;
+
         private Texture2D _gridTex;
         private Texture2D _backTex;
         private Texture2D _circleTex;
-        private Texture2D _knobTex;
-        private Texture2D _headerTex;
 
         public Color backColor;
         public Color knobColor;
@@ -38,8 +42,7 @@ namespace OSM {
 
         public bool bDrawGuide = false;
 
-        public OSM_Editor(OSM_EditorWindow w)
-        {
+        public OSM_Editor(OSM_EditorWindow w) {
             backColor = new Color32(59, 62, 74, 255);
             knobColor = new Color32(126, 186, 255, 255);
             
@@ -56,7 +59,6 @@ namespace OSM {
         #region Drawing
 
         public void Draw() {
-
             if (Event.current.type == EventType.Repaint) {
                 DrawGrid();
                 updateTextures();
@@ -85,7 +87,6 @@ namespace OSM {
         }
 
         private void DrawGraphName() {
-
             string graphName = "None";
             if (graph != null) {
                 graphName = graph.GetName();
@@ -95,19 +96,16 @@ namespace OSM {
         }
 
         private void CreateFileMenu() {
-            
             var menu = new GenericMenu();
             menu.DropDown(new Rect(5f, _window.ToolbarHeight, 0f, 0f));
         }
 
         private void CreateEditMenu() {
-
             var menu = new GenericMenu();
             menu.DropDown(new Rect(55f, _window.ToolbarHeight, 0f, 0f));
         }
 
         private void CreateViewMenu() {
-
             var menu = new GenericMenu();
 
             menu.AddItem(new GUIContent("Home"), false, HomeView);
@@ -119,16 +117,12 @@ namespace OSM {
 
         private void CreateSettingsMenu() {
             var menu = new GenericMenu();
-
             menu.AddItem(new GUIContent("Show Guide"), bDrawGuide, ToggleDrawGuide);
-            
             menu.DropDown(new Rect(155f, _window.ToolbarHeight, 0f, 0f));
         }
 
         private void CreateToolsMenu() {
-
             var menu = new GenericMenu();
-
             menu.DropDown(new Rect(215f, _window.ToolbarHeight, 0f, 0f));
         }
 
@@ -136,8 +130,7 @@ namespace OSM {
             return GUILayout.Button(name, EditorStyles.toolbarDropDown, GUILayout.Width(_window.ToolbarButtonWidth));
         }
 
-        private void DrawGraphContents()
-        {
+        private void DrawGraphContents() {
             Rect graphRect = _window.Size;
             var center = graphRect.size / 2f;
 
@@ -222,7 +215,9 @@ namespace OSM {
             DrawLine(gridCenter, Event.current.mousePosition, guideColor);
         }
 
-        private void DrawNodes() { }
+        private void DrawNodes() {
+            //
+        }
 
         private void DrawConnections() { }
 
@@ -450,6 +445,20 @@ namespace OSM {
         public void graphToScreenSpaceZoomAdj(ref Vector2 graphPos) {
             graphPos = GraphToScreenSpace(graphPos) / ZoomScale;
         }
+
+        // private bool isMouseOverNode() {
+        //     return OnMouseOverNode(onSingleSelected);
+        // }
+
+        // private bool isMouseOverCanvas()
+        // {
+        //     return !isMouseOverNode();
+        // }
+
+        // private bool isMouseOverOutput()
+        // {
+        //     return window.editor.OnMouseOverOutput(onOutputKnobSelected);
+        // }
 
         #endregion
 

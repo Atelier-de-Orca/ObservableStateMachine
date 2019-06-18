@@ -31,7 +31,18 @@ namespace OSM {
         public float ToolbarButtonWidth => 50f;
 
         [SerializeField]
-        public OSM_Graph graph;
+        public OSM_Graph _graph;
+        public OSM_Graph Graph {
+            get {
+                if (_graph == null)
+                    _graph = new OSM_Graph<object>();
+
+                return _graph;
+            }
+            set {
+                _graph = value;
+            }
+        }
         
         public OSM_Editor editor;
         public OSM_EditorState state;
@@ -46,7 +57,7 @@ namespace OSM {
             editor = new OSM_Editor(this);
             state = new OSM_EditorState();
 
-            editor.graph = graph;
+            editor.graph = Graph;
             _mode = Mode.Edit;
 
             editor.HomeView();
@@ -66,24 +77,30 @@ namespace OSM {
         private void OnEventProcess(Event e) {
             if (e.isMouse && e.button == 0) {
                 if (e.type == EventType.MouseDown) {
-                    Debug.Log("Left Mouse Down");
+                    // Debug.Log("Left Mouse Down");
                 }
                 else if (e.type == EventType.MouseUp) {
-                    Debug.Log("Left Mouse Up");
+                    // Debug.Log("Left Mouse Up");
                 }
             }
             else if (e.isMouse && e.button == 1) {
                 if (e.type == EventType.MouseDown) {
-                    Debug.Log("Right Mouse Down");
+                    // Debug.Log("Right Mouse Down");
                 }
                 else if (e.type == EventType.MouseUp) {
-                    Debug.Log("Right Mouse Up");
+                    // Debug.Log("Right Mouse Up");
+                    GenericMenu genericMenu = new GenericMenu();
+                    genericMenu.AddItem(new GUIContent("Add Node"), false,
+                    () => {
+                        Graph.CreateNode(e.mousePosition);
+                    });
+                    genericMenu.ShowAsContext();
                 }
             }
         }
 
         public void SetGraph(OSM_Graph g, Mode mode = Mode.Edit) {
-            graph = g;
+            Graph = g;
             editor.graph = g;
 
             _mode = mode;
@@ -117,12 +134,12 @@ namespace OSM {
                 foreach (var w in windows) {
 
                     // The canvas is already opened
-                    if (w.graph == graphSelected) {
+                    if (w.Graph == graphSelected) {
                         return false;
                     }
 
                     // Found a window with no active canvas.
-                    if (w.graph == null) {
+                    if (w.Graph == null) {
                         windowToUse = w;
                         break;
                     }
