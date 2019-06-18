@@ -45,6 +45,7 @@ namespace OSM {
         }
         
         public OSM_Editor editor;
+        public OSM_SaveManager saveManager;
         public OSM_EditorState state;
         
         public enum Mode { Edit, View };
@@ -55,6 +56,8 @@ namespace OSM {
             GUIScaleUtility.CheckInit();
 
             editor = new OSM_Editor(this);
+            saveManager = new OSM_SaveManager(this);
+
             state = new OSM_EditorState();
 
             editor.graph = Graph;
@@ -97,6 +100,10 @@ namespace OSM {
                     genericMenu.ShowAsContext();
                 }
             }
+        }
+
+        public void FindGraph() {
+            saveManager.OpenGraph();
         }
 
         public void SetGraph(OSM_Graph g, Mode mode = Mode.Edit) {

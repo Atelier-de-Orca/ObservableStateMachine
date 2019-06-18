@@ -74,11 +74,11 @@ namespace OSM {
         private void DrawToolbar() {
             EditorGUILayout.BeginHorizontal("Toolbar");
 
-            if (DropdownButton("File")) { CreateFileMenu(); }
-            if (DropdownButton("Edit")) { CreateEditMenu(); }
-            if (DropdownButton("View")) { CreateViewMenu(); }
-            if (DropdownButton("Settings")) { CreateSettingsMenu(); }
-            if (DropdownButton("Tools")) { CreateToolsMenu(); }
+            if (DropdownButton("File")) { FileMenuContext(); }
+            if (DropdownButton("Edit")) { EditMenuContext(); }
+            if (DropdownButton("View")) { ViewMenuContext(); }
+            if (DropdownButton("Settings")) { SettingsMenuContext(); }
+            if (DropdownButton("Tools")) { ToolsMenuContext(); }
 
             GUILayout.FlexibleSpace();
             DrawGraphName();
@@ -95,17 +95,18 @@ namespace OSM {
             GUILayout.Label(graphName);
         }
 
-        private void CreateFileMenu() {
+        private void FileMenuContext() {
             var menu = new GenericMenu();
+            menu.AddItem(new GUIContent("Open"), false, () => { _window.FindGraph(); });
             menu.DropDown(new Rect(5f, _window.ToolbarHeight, 0f, 0f));
         }
 
-        private void CreateEditMenu() {
+        private void EditMenuContext() {
             var menu = new GenericMenu();
             menu.DropDown(new Rect(55f, _window.ToolbarHeight, 0f, 0f));
         }
 
-        private void CreateViewMenu() {
+        private void ViewMenuContext() {
             var menu = new GenericMenu();
 
             menu.AddItem(new GUIContent("Home"), false, HomeView);
@@ -115,13 +116,13 @@ namespace OSM {
             menu.DropDown(new Rect(105f, _window.ToolbarHeight, 0f, 0f));
         }
 
-        private void CreateSettingsMenu() {
+        private void SettingsMenuContext() {
             var menu = new GenericMenu();
             menu.AddItem(new GUIContent("Show Guide"), bDrawGuide, ToggleDrawGuide);
             menu.DropDown(new Rect(155f, _window.ToolbarHeight, 0f, 0f));
         }
 
-        private void CreateToolsMenu() {
+        private void ToolsMenuContext() {
             var menu = new GenericMenu();
             menu.DropDown(new Rect(215f, _window.ToolbarHeight, 0f, 0f));
         }
