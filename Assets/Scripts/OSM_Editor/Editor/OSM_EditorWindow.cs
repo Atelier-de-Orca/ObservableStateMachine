@@ -4,6 +4,7 @@ using UnityEditor;
 using UnityEditor.Callbacks;
 
 using NodeEditorFramework.Utilities;
+using System;
 
 namespace OSM {
 
@@ -34,9 +35,6 @@ namespace OSM {
         public OSM_Graph _graph;
         public OSM_Graph Graph {
             get {
-                if (_graph == null)
-                    _graph = new OSM_Graph<object>();
-
                 return _graph;
             }
             set {
@@ -104,6 +102,20 @@ namespace OSM {
 
         public void FindGraph() {
             saveManager.OpenGraph();
+        }
+
+        public void CreateGraph(Type type) {
+
+            string path = EditorUtility.OpenFolderPanel("Open Node Graph", "Assets/", "");
+
+            if (!path.Contains(Application.dataPath)) {
+                if (!string.IsNullOrEmpty(path)) {
+                    ShowNotification(new GUIContent("Please select a Graph asset within the project's Asset folder."));
+                }
+            }
+            else {
+                saveManager.CreateNewGraph(type, path);
+            }
         }
 
         public void SetGraph(OSM_Graph g, Mode mode = Mode.Edit) {

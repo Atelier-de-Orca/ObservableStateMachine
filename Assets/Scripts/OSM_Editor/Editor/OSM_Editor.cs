@@ -1,5 +1,6 @@
 ﻿
 using System;
+using System.Linq;
 using System.Collections.Generic;
 
 using UnityEngine;
@@ -124,6 +125,20 @@ namespace OSM {
 
         private void ToolsMenuContext() {
             var menu = new GenericMenu();
+
+            System.Reflection.Assembly.GetExecutingAssembly()
+                .GetTypes()
+                .Where(t => t.BaseType != null)
+                .Where(t => t.BaseType.IsGenericType)
+                .Where(t => t.BaseType.GetGenericTypeDefinition() == typeof(OSM_Graph<>)).ToList()
+                .ForEach(e => {
+                    menu.AddItem(new GUIContent($"{e}"), bDrawGuide,
+                    () => {
+                        _window.CreateGraph(e);
+                        Debug.Log($"{e}");
+                    });
+                });
+
             menu.DropDown(new Rect(215f, _window.ToolbarHeight, 0f, 0f));
         }
 

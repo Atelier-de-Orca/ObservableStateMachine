@@ -18,12 +18,11 @@ namespace OSM
         public abstract void Clear();
     }
 
-    public class OSM_Graph<T> : OSM_Graph {
+    public class OSM_Graph<T> : OSM_Graph where T : OSM_Node {
         
-        public static HashSet<Type> nodeTypes = new HashSet<Type>();
+        public static Type nodeTypes => typeof(T);
 
-        [HideInInspector]
-        public List<OSM_Node<T>> nodes;
+        public List<T> nodes;
         
         public override List<OSM_Node> GetNodes() {
             return nodes as List<OSM_Node>;

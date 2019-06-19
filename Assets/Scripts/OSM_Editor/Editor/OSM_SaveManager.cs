@@ -22,8 +22,18 @@ namespace OSM {
             _window = w;
         }
 
-        public void CreateNewGraph() {
+        public void CreateNewGraph(Type type, string path) {
 
+            int assetIndex = path.IndexOf("/Assets");
+            path = path.Substring(assetIndex + 1);
+
+            var graph = ScriptableObject.CreateInstance(type.ToString());
+
+            Debug.Log(path);
+
+            AssetDatabase.CreateAsset(graph, path + $"/{type.ToString()}(Default).asset");
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
         }
 
         public void SaveNodeInGraph() {
