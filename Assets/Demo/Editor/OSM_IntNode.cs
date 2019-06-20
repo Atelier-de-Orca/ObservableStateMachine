@@ -3,4 +3,4 @@ using System.Collections.Generic;
 using UnityEngine;
 using OSM;
 
-public class OSM_IntGraph : OSM_Graph<OSM_IntNode> { }
+public class OSM_IntNode : OSM_Node<int> {}

@@ -45,7 +45,7 @@ namespace OSM {
     public class OSM_Node<T> : OSM_Node {
 
         void OnEnable() {
-            hideFlags = HideFlags.HideInHierarchy;
+            hideFlags = HideFlags.None;
             name = GetType().Name;
 
 #if UNITY_EDITOR

@@ -93,7 +93,9 @@ namespace OSM {
                     GenericMenu genericMenu = new GenericMenu();
                     genericMenu.AddItem(new GUIContent("Add Node"), false,
                     () => {
-                        Graph.CreateNode(e.mousePosition);
+                        var node = saveManager.CreateNewNode(Graph.GetNodeType());
+                        Debug.Log(node);
+                        Graph.Add(node, e.mousePosition);
                     });
                     genericMenu.ShowAsContext();
                 }
@@ -140,8 +142,9 @@ namespace OSM {
         public Mode GetMode() { return _mode; }
 
 
-        [OnOpenAsset(1)]
+        [OnOpenAssetAttribute(1)]
         private static bool OpenGraphAsset(int instanceID, int line) {
+            Debug.Log(instanceID);
             var graphSelected = EditorUtility.InstanceIDToObject(instanceID) as OSM_Graph;
 
             if (graphSelected != null) {

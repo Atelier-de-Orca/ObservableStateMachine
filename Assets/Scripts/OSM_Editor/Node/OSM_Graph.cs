@@ -8,10 +8,11 @@ namespace OSM
     public abstract class OSM_Graph : ScriptableObject {
 
         public abstract string GetName();
+        public abstract Type GetNodeType();
         public abstract List<OSM_Node> GetNodes();
         
         public abstract void CreateNode(Vector2 position);
-        public abstract void Add(OSM_Node n);
+        public abstract void Add(OSM_Node n, Vector2 position);
         public abstract void Remove(OSM_Node node);
         public abstract void PushToEnd(OSM_Node node);
         public abstract void OnSave();
@@ -19,21 +20,20 @@ namespace OSM
     }
 
     public class OSM_Graph<T> : OSM_Graph where T : OSM_Node {
-        
-        public static Type nodeTypes => typeof(T);
 
         public List<T> nodes;
         
         public override List<OSM_Node> GetNodes() {
             return nodes as List<OSM_Node>;
         }
+        
 
         public override void CreateNode(Vector2 position) {
 
             Debug.Log($"Current Nodes Count {nodes.Count}");
         }
         
-        public override void Add(OSM_Node n) {
+        public override void Add(OSM_Node n, Vector2 position) {
 
             // nodes.Add(n);
         }
@@ -61,5 +61,6 @@ namespace OSM
         }
 
         public override string GetName() => name;
+        public override Type GetNodeType() => typeof(T);
     }
 }

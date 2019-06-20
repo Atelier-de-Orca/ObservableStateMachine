@@ -36,6 +36,22 @@ namespace OSM {
             AssetDatabase.Refresh();
         }
 
+        public OSM_Node CreateNewNode(Type type) {
+
+            try {
+                Debug.Log(type);
+                var node = ScriptableObject.CreateInstance(type);
+                AssetDatabase.AddObjectToAsset(node, _window.Graph);
+                AssetDatabase.ImportAsset(AssetDatabase.GetAssetPath(node));
+
+                ((OSM_Node)node).Init();
+                return (OSM_Node)node;
+            }
+            catch (Exception e) {
+                throw new UnityException(e.Message);
+            }
+        }
+
         public void SaveNodeInGraph() {
 
         }
