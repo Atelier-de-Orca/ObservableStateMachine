@@ -1,5 +1,45 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-3189749123672146513
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87043dfd93bcb9e45b1b077f3d5f9d65, type: 3}
+  m_Name: OSM_Int Node
+  m_EditorClassIdentifier: 
+  bodyRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 140
+    height: 110
+  _outputs: []
+  _inputs: []
+--- !u!114 &-424632473605532864
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87043dfd93bcb9e45b1b077f3d5f9d65, type: 3}
+  m_Name: OSM_Int Node
+  m_EditorClassIdentifier: 
+  bodyRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 140
+    height: 110
+  _outputs: []
+  _inputs: []
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12,4 +52,69 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ecba7fa8da62fdd44bdf15da51870224, type: 3}
   m_Name: OSM_IntGraph(Default)
   m_EditorClassIdentifier: 
-  nodes: []
+  nodes:
+  - {fileID: 7012653421031809319}
+  - {fileID: 133557804825617121}
+  - {fileID: -3189749123672146513}
+  - {fileID: 2222449427006937142}
+  - {fileID: -424632473605532864}
+--- !u!114 &133557804825617121
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87043dfd93bcb9e45b1b077f3d5f9d65, type: 3}
+  m_Name: OSM_Int Node
+  m_EditorClassIdentifier: 
+  bodyRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 140
+    height: 110
+  _outputs: []
+  _inputs: []
+--- !u!114 &2222449427006937142
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87043dfd93bcb9e45b1b077f3d5f9d65, type: 3}
+  m_Name: OSM_Int Node
+  m_EditorClassIdentifier: 
+  bodyRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 140
+    height: 110
+  _outputs: []
+  _inputs: []
+--- !u!114 &7012653421031809319
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87043dfd93bcb9e45b1b077f3d5f9d65, type: 3}
+  m_Name: OSM_Int Node
+  m_EditorClassIdentifier: 
+  bodyRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 140
+    height: 110
+  _outputs: []
+  _inputs: []

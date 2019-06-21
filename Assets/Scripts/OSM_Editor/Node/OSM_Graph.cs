@@ -11,7 +11,6 @@ namespace OSM
         public abstract Type GetNodeType();
         public abstract List<OSM_Node> GetNodes();
         
-        public abstract void CreateNode(Vector2 position);
         public abstract void Add(OSM_Node n, Vector2 position);
         public abstract void Remove(OSM_Node node);
         public abstract void PushToEnd(OSM_Node node);
@@ -24,18 +23,16 @@ namespace OSM
         public List<T> nodes;
         
         public override List<OSM_Node> GetNodes() {
-            return nodes as List<OSM_Node>;
+            return nodes.ConvertAll<OSM_Node>(new Converter<T, OSM_Node>(TtoNode));
         }
-        
 
-        public override void CreateNode(Vector2 position) {
-
-            Debug.Log($"Current Nodes Count {nodes.Count}");
+        public static OSM_Node TtoNode(T element) {
+            return element as OSM_Node;
         }
         
         public override void Add(OSM_Node n, Vector2 position) {
-
-            // nodes.Add(n);
+            n.bodyRect.position = position;
+            nodes.Add((T)n);
         }
 
         public override void Remove(OSM_Node node) {

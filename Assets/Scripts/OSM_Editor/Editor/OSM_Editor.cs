@@ -65,8 +65,10 @@ namespace OSM {
                 updateTextures();
             }
 
-            if (graph != null)
-                DrawGraphContents();
+            if (graph != null) {
+                Debug.Log(graph);
+                DrawGraphContents(graph);
+            }
 
             DrawMode();
             DrawToolbar();
@@ -146,7 +148,7 @@ namespace OSM {
             return GUILayout.Button(name, EditorStyles.toolbarDropDown, GUILayout.Width(_window.ToolbarButtonWidth));
         }
 
-        private void DrawGraphContents() {
+        private void DrawGraphContents(OSM_Graph graph) {
             Rect graphRect = _window.Size;
             var center = graphRect.size / 2f;
 
@@ -155,7 +157,7 @@ namespace OSM {
             DrawGridOverlay();
             DrawConnectionPreview();
             DrawConnections();
-            DrawNodes();
+            DrawNodes(graph.GetNodes());
 
             GUIScaleUtility.EndScale();
         }
@@ -231,8 +233,8 @@ namespace OSM {
             DrawLine(gridCenter, Event.current.mousePosition, guideColor);
         }
 
-        private void DrawNodes() {
-            //
+        private void DrawNodes(List<OSM_Node> nodes) {
+            Debug.Log(nodes.Count);
         }
 
         private void DrawConnections() { }
@@ -268,8 +270,8 @@ namespace OSM {
             // if (EditorGUI.EndChangeCheck()) 
             //     if (onNodeGuiChange != null) onNodeGuiChange(graph, node);
 
-            // GUILayout.EndArea();
-            // GUI.EndGroup();
+            GUILayout.EndArea();
+            GUI.EndGroup();
         }
 
         public void DrawMode() {
